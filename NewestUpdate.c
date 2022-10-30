@@ -15,13 +15,14 @@ void MenuSubSort(); // ascending / descending
 void GetChoiceOfSubSort(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
 
 
-// Declare Function & SubFunction
+// Declare Function & SubFunction 
 int isEmpty(int n);
 void DisplayFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
 void AddNewFood(int*nums,int*Rno,int rno,char*Names[],char getname[],int*Price,int price,int*Quantity,int quantity,char*mfg[],char getmfg[],char*exp[],char getexp[]);
 void SwapInt(int*p1,int*p2);
 void SwapChar(char* str1,char* str2);
 void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
+
 
 
 // Process Of Procedure Menu
@@ -272,6 +273,7 @@ void MenuSubSort() {
 
 }
 
+
 void GetChoiceOfSubSort(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
 	int CSort,CSSort;
 	system("cls");
@@ -456,6 +458,8 @@ void SwapChar(char* str1,char* str2)
 
 void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
 	int i,j;
+	char d[2],m[2],y[4];
+	int day1,month1,year1,day2,month2,year2;
 	/*
 		1.Ascending
 		2.Descending
@@ -495,7 +499,7 @@ void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,i
 			if(choice2==1) {
 				for(i=0;i<(*NumOfFood)-1;i++) {
 					for(j=i+1;j<*NumOfFood;j++) {
-					if (strcmp(Names[i],Names[j])) {
+					if (strcmp(Names[i],Names[j])>0) {
 						SwapInt(&Rno[i],&Rno[j]);
 						SwapInt(&Price[i],&Price[j]);
 						SwapInt(&Quantity[i],&Quantity[j]);
@@ -508,7 +512,7 @@ void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,i
 		} else {
 			for(i=0;i<(*NumOfFood)-1;i++) {
 				for(j=i+1;j<*NumOfFood;j++) {
-					if (!strcmp(Names[i],Names[j])) {
+					if (strcmp(Names[i],Names[j])<0) {
 						SwapInt(&Rno[i],&Rno[j]);
 						SwapInt(&Price[i],&Price[j]);
 						SwapInt(&Quantity[i],&Quantity[j]);
@@ -550,62 +554,181 @@ void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,i
 			}
 			break;
 		case 4:
+
+//			int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]
+//			int CheckDay(char a[],int*pd,int*pm,int*py) {
+//	
+//			char d[2],m[2],y[4];
+//	
+//	strncpy(d, a, 2); 
+//	strncpy(m, a+3, 2);
+//	strncpy(y, a+6, 4);
+//	
+//	*(pd) = atoi(d);
+//	*(pm) = atoi(m);
+//	*(py) = atoi(y);
+//	
+//			*(pd) = atoi(d);
+//			*(pm) = atoi(m);
+//			*(py) = atoi(y);
 			if(choice2==1) {
-				for(i=0;i<(*NumOfFood)-1;i++) {
-					for(j=i+1;j<*NumOfFood;j++) {
-						if (strcmp(mfg[i],mfg[j])) {
-							SwapInt(&Rno[i],&Rno[j]);
-							SwapInt(&Price[i],&Price[j]);
-							SwapInt(&Quantity[i],&Quantity[j]);
-							SwapChar(Names[i],Names[j]);
-							SwapChar(mfg[i],mfg[j]);
-							SwapChar(exp[i],exp[j]);
+				for(i=0;i<(*NumOfFood)-1;i++) { //dd/mm/yyyy//
+					strncpy(d, mfg[i], 2); day1 = atoi(d);
+					strncpy(m, mfg[i]+3,2); month1 = atoi(m);
+					strncpy(y, mfg[i]+6, 4); year1 = atoi(y);
+					
+						for(j=i+1;j<*NumOfFood;j++) {
+						strncpy(d, mfg[j], 2); day2 = atoi(d);
+						strncpy(m, mfg[j]+3,2); month2 = atoi(m);
+						strncpy(y, mfg[j]+6, 4); year2 = atoi(y);
+					
+							if(year1>year2) {
+								SwapInt(&Rno[i],&Rno[j]);
+								SwapInt(&Price[i],&Price[j]);
+								SwapInt(&Quantity[i],&Quantity[j]);
+								SwapChar(Names[i],Names[j]);
+								SwapChar(mfg[i],mfg[j]);
+								SwapChar(exp[i],exp[j]);
+							} else if (year1 == year2) {
+								if (month1>month2) {
+									SwapInt(&Rno[i],&Rno[j]);
+									SwapInt(&Price[i],&Price[j]);
+									SwapInt(&Quantity[i],&Quantity[j]);
+									SwapChar(Names[i],Names[j]);
+									SwapChar(mfg[i],mfg[j]);
+									SwapChar(exp[i],exp[j]);
+								} else if (month1 == month2) {
+									if (day1 > day2) {
+										SwapInt(&Rno[i],&Rno[j]);
+										SwapInt(&Price[i],&Price[j]);
+										SwapInt(&Quantity[i],&Quantity[j]);
+										SwapChar(Names[i],Names[j]);
+										SwapChar(mfg[i],mfg[j]);
+										SwapChar(exp[i],exp[j]);	
+									}
+								}
+							}
+						}
+				} } else {
+					for(i=0;i<(*NumOfFood)-1;i++) { 	/*dd/mm/yyyy*/
+					strncpy(d, mfg[i], 2); day1 = atoi(d);
+					strncpy(m, mfg[i]+3,2); month1 = atoi(m);
+					strncpy(y, mfg[i]+6, 4); year1 = atoi(y);
+					
+						for(j=i+1;j<*NumOfFood;j++) {
+						strncpy(d, mfg[j], 2); day2 = atoi(d);
+						strncpy(m, mfg[j]+3,2); month2 = atoi(m);
+						strncpy(y, mfg[j]+6, 4); year2 = atoi(y);
+					
+							if(year1<year2) {
+								SwapInt(&Rno[i],&Rno[j]);
+								SwapInt(&Price[i],&Price[j]);
+								SwapInt(&Quantity[i],&Quantity[j]);
+								SwapChar(Names[i],Names[j]);
+								SwapChar(mfg[i],mfg[j]);
+								SwapChar(exp[i],exp[j]);
+							} else if (year1 == year2) {
+								if (month1<month2) {
+									SwapInt(&Rno[i],&Rno[j]);
+									SwapInt(&Price[i],&Price[j]);
+									SwapInt(&Quantity[i],&Quantity[j]);
+									SwapChar(Names[i],Names[j]);
+									SwapChar(mfg[i],mfg[j]);
+									SwapChar(exp[i],exp[j]);
+								} else if (month1 == month2) {
+									if (day1 < day2) {
+										SwapInt(&Rno[i],&Rno[j]);
+										SwapInt(&Price[i],&Price[j]);
+										SwapInt(&Quantity[i],&Quantity[j]);
+										SwapChar(Names[i],Names[j]);
+										SwapChar(mfg[i],mfg[j]);
+										SwapChar(exp[i],exp[j]);	
+									}
+								}
+							}
 						}
 					}
-				}
-			} else {
-				for(i=0;i<(*NumOfFood)-1;i++) {
-					for(j=i+1;j<*NumOfFood;j++) {
-						if (!strcmp(mfg[i],mfg[j])) {
-							SwapInt(&Rno[i],&Rno[j]);
-							SwapInt(&Price[i],&Price[j]);
-							SwapInt(&Quantity[i],&Quantity[j]);
-							SwapChar(Names[i],Names[j]);
-							SwapChar(mfg[i],mfg[j]);
-							SwapChar(exp[i],exp[j]);
-						}
-					}
-				}
-			}
-			break;
+				}	
+				break;
 		case 5:
 			if(choice2==1) {
-				for(i=0;i<(*NumOfFood)-1;i++) {
-					for(j=i+1;j<*NumOfFood;j++) {
-						if (strcmp(exp[i],exp[j])) {
-							SwapInt(&Rno[i],&Rno[j]);
-							SwapInt(&Price[i],&Price[j]);
-							SwapInt(&Quantity[i],&Quantity[j]);
-							SwapChar(Names[i],Names[j]);
-							SwapChar(mfg[i],mfg[j]);
-							SwapChar(exp[i],exp[j]);
+				for(i=0;i<(*NumOfFood)-1;i++) { //dd/mm/yyyy//
+					strncpy(d, mfg[i], 2); day1 = atoi(d);
+					strncpy(m, mfg[i]+3,2); month1 = atoi(m);
+					strncpy(y, mfg[i]+6, 4); year1 = atoi(y);
+					
+						for(j=i+1;j<*NumOfFood;j++) {
+						strncpy(d, mfg[j], 2); day2 = atoi(d);
+						strncpy(m, mfg[j]+3,2); month2 = atoi(m);
+						strncpy(y, mfg[j]+6, 4); year2 = atoi(y);
+					
+							if(year1<year2) {
+								SwapInt(&Rno[i],&Rno[j]);
+								SwapInt(&Price[i],&Price[j]);
+								SwapInt(&Quantity[i],&Quantity[j]);
+								SwapChar(Names[i],Names[j]);
+								SwapChar(mfg[i],mfg[j]);
+								SwapChar(exp[i],exp[j]);
+							} else if (year1 == year2) {
+								if (month1<month2) {
+									SwapInt(&Rno[i],&Rno[j]);
+									SwapInt(&Price[i],&Price[j]);
+									SwapInt(&Quantity[i],&Quantity[j]);
+									SwapChar(Names[i],Names[j]);
+									SwapChar(mfg[i],mfg[j]);
+									SwapChar(exp[i],exp[j]);
+								} else if (month1 == month2) {
+									if (day1 < day2) {
+										SwapInt(&Rno[i],&Rno[j]);
+										SwapInt(&Price[i],&Price[j]);
+										SwapInt(&Quantity[i],&Quantity[j]);
+										SwapChar(Names[i],Names[j]);
+										SwapChar(mfg[i],mfg[j]);
+										SwapChar(exp[i],exp[j]);	
+									}
+								}
+							}
+						}
+				} } else {
+					for(i=0;i<(*NumOfFood)-1;i++) { 	/*dd/mm/yyyy*/
+					strncpy(d, mfg[i], 2); day1 = atoi(d);
+					strncpy(m, mfg[i]+3,2); month1 = atoi(m);
+					strncpy(y, mfg[i]+6, 4); year1 = atoi(y);
+					
+						for(j=i+1;j<*NumOfFood;j++) {
+						strncpy(d, mfg[j], 2); day2 = atoi(d);
+						strncpy(m, mfg[j]+3,2); month2 = atoi(m);
+						strncpy(y, mfg[j]+6, 4); year2 = atoi(y);
+					
+							if(year1>year2) {
+								SwapInt(&Rno[i],&Rno[j]);
+								SwapInt(&Price[i],&Price[j]);
+								SwapInt(&Quantity[i],&Quantity[j]);
+								SwapChar(Names[i],Names[j]);
+								SwapChar(mfg[i],mfg[j]);
+								SwapChar(exp[i],exp[j]);
+							} else if (year1 == year2) {
+								if (month1>month2) {
+									SwapInt(&Rno[i],&Rno[j]);
+									SwapInt(&Price[i],&Price[j]);
+									SwapInt(&Quantity[i],&Quantity[j]);
+									SwapChar(Names[i],Names[j]);
+									SwapChar(mfg[i],mfg[j]);
+									SwapChar(exp[i],exp[j]);
+								} else if (month1 == month2) {
+									if (day1 > day2) {
+										SwapInt(&Rno[i],&Rno[j]);
+										SwapInt(&Price[i],&Price[j]);
+										SwapInt(&Quantity[i],&Quantity[j]);
+										SwapChar(Names[i],Names[j]);
+										SwapChar(mfg[i],mfg[j]);
+										SwapChar(exp[i],exp[j]);	
+									}
+								}
+							}
 						}
 					}
 				}
-			} else {
-				for(i=0;i<(*NumOfFood)-1;i++) {
-					for(j=i+1;j<*NumOfFood;j++) {
-						if (!strcmp(exp[i],exp[j])) {
-							SwapInt(&Rno[i],&Rno[j]);
-							SwapInt(&Price[i],&Price[j]);
-							SwapInt(&Quantity[i],&Quantity[j]);
-							SwapChar(Names[i],Names[j]);
-							SwapChar(mfg[i],mfg[j]);
-							SwapChar(exp[i],exp[j]);
-						}
-					}
-				}
-			}
 			break;
 		case 6:
 			if(choice2==1) {
