@@ -10,11 +10,10 @@ void MenuOwner();
 void GetChoiceOfOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
 void MenuCustomer();
 void GetChoiceOfCustomer();
-void MenuSort(); // Sort depend on what 
-void MenuSubSort(); // ascending / descending
+void MenuSort(); 
+void MenuSubSort();
 void GetChoiceOfSubSort(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
-
-
+ 
 // Declare Function & SubFunction 
 int isEmpty(int n);
 void DisplayFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
@@ -22,7 +21,16 @@ void AddNewFood(int*nums,int*Rno,int rno,char*Names[],char getname[],int*Price,i
 void SwapInt(int*p1,int*p2);
 void SwapChar(char* str1,char* str2);
 void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
+void MenuFind();
 
+void FindByName(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[]);
+void FindByPrice(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],int price);
+void DeleteFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[]);
+void DeleteAllFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
+
+/* Declare File Function */
+void ReadFile(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
+void WriteFile(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
 
 
 // Process Of Procedure Menu
@@ -37,13 +45,13 @@ void ChooseRole() {
 	tab;printf("   3. EXIT \n");
 	tab;printf(" ===============================================\n\n");
 	tab;printf("Enter your role: ");
-	userChoice = getch();
+	scanf("%d",&userChoice);
 	switch(userChoice) {
-		case 49:
+		case 1:
 			system("cls");
 			MenuOwner();
 			break;
-		case 50:
+		case 2:
 			system("cls");
 			MenuCustomer();
 			break;
@@ -61,15 +69,16 @@ void MenuOwner() {
 	tab;printf(" ===============================================\n");
 	tab;printf("   1. Display all Food                 \n");
 	tab;printf("   2. Add new Food                     \n");
-	tab;printf("   3. Sort all Food \n");
+	tab;printf("   3. Sort all Food 				   \n");
 	tab;printf("   4. Looking for Food         \n");
 	tab;printf("   5. Delete Food       \n");
-	tab;printf("   6. Delate All Food       \n");
-	tab;printf("   7. Back to Role Menu      \n");
-	tab;printf("   8. EXIT      \n");
+	tab;printf("   6. Delete All Food       \n");
+	tab;printf("   7. Write to text file      \n");
+	tab;printf("   8. Back to Role Menu      \n");
+	tab;printf("   9. EXIT      \n");
 	tab;printf(" ===============================================\n\n");
 	tab;printf("Enter your choice: ");
-	
+		
 }
 
 
@@ -80,7 +89,7 @@ void GetChoiceOfOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,
 	
 	/* Declared for get input value to add  */
 	char getname[20],getmfg[20],getexp[20];
-	int rno,price,quantity;
+	int rno,price,quantity,i;
 		scanf("%d", &userChoice);
 		switch(userChoice) {
 		case 1:
@@ -171,7 +180,8 @@ void GetChoiceOfOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,
 		case 3:
 				if(isEmpty(*NumOfFood)) {
 					system("cls");
-					printf("\nMini Market doestn't have any food to show!\n");
+					printf("\n<===============|SORT FOOD|===============>\n");
+					printf("\nMini Market doestn't have any food to sort!\n");
 					printf("\nBack to Menu Shop Owner (y/n): ");
 					userChoice = getch();
 						if(userChoice==121) {
@@ -186,16 +196,94 @@ void GetChoiceOfOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,
 				GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			break;
 		case 4:
-			
+			if(isEmpty(*NumOfFood)) {
+					system("cls");
+					printf("\n<===============|FIND-FOOD|===============>\n");
+					printf("\nMini Market doestn't have any food to find!\n");
+					printf("\nBack to Menu Shop Owner (y/n): ");
+					userChoice = getch();
+						if(userChoice==121) {
+							system("cls");
+							MenuOwner();
+							GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+						} else printf("\n\nThe Program Will Exit!!!"); exit(1); break;
+				}
+			system("cls");
+			MenuFind();
+			scanf("%d", &userChoice);
+			if(userChoice==1) {
+				system("cls");
+				printf("<=======================|FIND-FOOD|=======================>\n");
+				printf("\nEnter name of food you wanna looking for: ");
+				fflush(stdin);
+				scanf("%20[^\n]s",getname);
+				while(getname[0]==' ') {
+				
+						for(i=0;i<strlen(getname);i++) {
+							getname[i] = getname[i+1];
+						}
+				
+				}
+				while(strlen(getname)<20) {
+					strncat(getname, " ",20-strlen(getname));
+				}
+				FindByName(NumOfFood,Rno,Names,Price,Quantity,mfg,exp,getname);
+				MenuOwner();
+				GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+				
+			} else if(userChoice==2) {
+				printf("Enter Price Of Food you wanna looking for: ");
+				scanf("%d",&price);
+				FindByPrice(NumOfFood,Rno,Names,Price,Quantity,mfg,exp,price);
+				MenuOwner();
+				GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			} else {
+				fflush(stdin);
+				MenuOwner();
+				GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			}
 			break;
 		case 5:
-			
+			if(isEmpty(*NumOfFood)) {
+					system("cls");
+					printf("\n<===============|DELETE-FOOD|===============>\n");
+					printf("\nMini Market doestn't have any food to delete!\n");
+					printf("\nBack to Menu Shop Owner (y/n): ");
+					userChoice = getch();
+						if(userChoice==121) {
+							system("cls");
+							MenuOwner();
+							GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+						} else printf("\n\nThe Program Will Exit!!!"); exit(1); break;
+				}
+			printf("\nEnter name of food you wanna delete: ");
+			fflush(stdin);
+			scanf("%[^\n]s",getname);
+			while(getname[0]==' ') {
+				
+						for(i=0;i<strlen(getname);i++) {
+							getname[i] = getname[i+1];
+						}
+				
+				}
+			while(strlen(getname)<20) {
+				strncat(getname, " ",20-strlen(getname));
+			}
+			DeleteFood(NumOfFood,Rno,Names,Price,Quantity,mfg,exp,getname);
+			DisplayFood(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			MenuOwner();
+			GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			break;
 		case 6:
-		
+			DeleteAllFood(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			DisplayFood(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			MenuOwner();
+			GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			break;
-		
-		case 7: 
+		case 7:
+			WriteFile(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			break;
+		case 8:
 			system("cls");
 			ChooseRole();
 			GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
@@ -213,32 +301,49 @@ void MenuCustomer() {
 	tab;printf(" ===============================================\n");
 	tab;printf("   1. Display all Food                 \n");
 	tab;printf("   2. Buy Food \n"); // Sort depend on price 1. Mua luon hay khong a. Mua = remove, b. Khong mua = ... 2. Chinh sua don hang
-	tab;printf("   3. Back to Role Menu      \n");
-	tab;printf("   4. EXIT      \n");
+	tab;printf("   3. EXIT      \n");
 	tab;printf(" ===============================================\n\n");
 	tab;printf("Enter your choice: ");
 	GetChoiceOfCustomer();
 	 
 }
 
-void GetChoiceOfCustomer() {
+void GetChoiceOfCustomer(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
 	int userChoice;
 	scanf("%d", &userChoice);
 	switch(userChoice) {
 		case 1:
-			
+				do {
+					system("cls");
+					printf("\nGroup 6's Mini Market!!\n\n");
+					if(isEmpty(*NumOfFood)) {
+						printf("Mini Market doestn't have any food to show!\n");
+						printf("\nBack to Menu Shop Owner (y/n): ");
+						userChoice = getch();
+							if(userChoice==121) {
+								system("cls");
+								MenuCustomer();
+								GetChoiceOfCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+							} else printf("\n\nThe Program Will Exit!!!"); exit(1); break;
+					} 
+					else {
+						DisplayFood(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+						fflush(stdin);
+						MenuCustomer();
+						GetChoiceOfCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+						
+					}
+				} while(userChoice==121);
+
 			break;
 			
 		case 2:
 		
 			break;
-			
-		case 3:
-		
-			break;	
 		
 		default:
 			tab;printf("The Program Will Exit !!!");
+			exit(1);
 	}
 }
 
@@ -359,30 +464,24 @@ int isEmpty(int n) {
 }
 
 
-void DisplayFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
-	int i;
-	printf("NO\tNAME\t\tPRICE\t\tManufacturing Date\tExpiry_Date\tQUANTITY\n");
-	for(i=0;i<*NumOfFood;i++) {	
-		if(strlen(Names[i])>7) {
-				printf("%d\t",Rno[i]);
-				printf("%s\t",Names[i]);
-				printf("%d\t\t",Price[i]);
-				printf("%s\t\t",mfg[i]);
-				printf("%s\t",exp[i]);
-				printf("%d\n",Quantity[i]);
-			}
-		else {
-			printf("%d\t",Rno[i]);
-			printf("%s\t\t",Names[i]);
-			printf("%d\t\t",Price[i]);
-			printf("%s\t\t",mfg[i]);
-			printf("%s\t",exp[i]);
-			printf("%d\n",Quantity[i]);
-		}
-
+void DisplayFood(int*NumOfFood,int*Rno,char *Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
+	int i =0;
+	printf("\t\t\t\t\t\t|MENU FOOD|");
+	printf("\n===================================================================================="
+	"====================================\n");
+	printf("\nNO\t    NAME\t\tPRICE\t\t  QUANTITY\t     Manufacturing_Date    Expiry_Date\n\n");
+	for(i=0;i<*NumOfFood;i++) {
+		
+		printf("%-10d  ",Rno[i]);
+		printf("%-20s",Names[i]);
+		printf("%-20d",Price[i]);
+		printf("%-20d",Quantity[i]);
+		printf("%-20s",mfg[i]);
+		printf("%-10s\n",exp[i]);
+		
 	}
-	
-	
+	printf("\n===================================================================================="
+	"====================================\n");
 }
 
 /*    Function 2: Add Food     */
@@ -416,6 +515,8 @@ int CheckDay(char a[],int*pd,int*pm,int*py) {
 
 
 
+
+
 void AddNewFood(int*nums,int*Rno,int rno,
 				char*Names[],char getname[],
 				int*Price,int price,int*Quantity,int quantity,
@@ -425,7 +526,7 @@ void AddNewFood(int*nums,int*Rno,int rno,
 	 Names[*nums] = malloc(strlen(getname) + 1);
 	   mfg[*nums] = malloc(strlen(getmfg) + 1);
 	   exp[*nums] = malloc(strlen(getexp) + 1);
-	   
+	
 /* Adding... */	   
 	   Rno[*nums] = rno;
  	 Price[*nums] = price;
@@ -435,8 +536,6 @@ void AddNewFood(int*nums,int*Rno,int rno,
 	strcpy( mfg[*nums], getmfg);
 	strcpy( exp[*nums], getexp);
 	(*nums)++;
-	
-
 }
 
 
@@ -451,9 +550,9 @@ void SwapInt(int*p1,int*p2) {
 void SwapChar(char* str1,char* str2) 
 {
 	char temp[20];
-   strncpy(temp,str1,20);
-   strncpy(str1,str2,20);
-   strncpy(str2,temp,20);
+   strcpy(temp,str1);
+   strcpy(str1,str2);
+   strcpy(str2,temp);
 }
 
 void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
@@ -554,23 +653,6 @@ void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,i
 			}
 			break;
 		case 4:
-
-//			int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]
-//			int CheckDay(char a[],int*pd,int*pm,int*py) {
-//	
-//			char d[2],m[2],y[4];
-//	
-//	strncpy(d, a, 2); 
-//	strncpy(m, a+3, 2);
-//	strncpy(y, a+6, 4);
-//	
-//	*(pd) = atoi(d);
-//	*(pm) = atoi(m);
-//	*(py) = atoi(y);
-//	
-//			*(pd) = atoi(d);
-//			*(pm) = atoi(m);
-//			*(py) = atoi(y);
 			if(choice2==1) {
 				for(i=0;i<(*NumOfFood)-1;i++) { //dd/mm/yyyy//
 					strncpy(d, mfg[i], 2); day1 = atoi(d);
@@ -581,7 +663,7 @@ void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,i
 						strncpy(d, mfg[j], 2); day2 = atoi(d);
 						strncpy(m, mfg[j]+3,2); month2 = atoi(m);
 						strncpy(y, mfg[j]+6, 4); year2 = atoi(y);
-					
+		
 							if(year1>year2) {
 								SwapInt(&Rno[i],&Rno[j]);
 								SwapInt(&Price[i],&Price[j]);
@@ -765,30 +847,197 @@ void Sort(int choice1,int choice2,int*NumOfFood,int*Rno,char*Names[],int*Price,i
 			break;
 	}
 }
+/* File Processing */
+
+void ReadFile(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
+		char getexp[20],getmfg[20], getname[20];
+		int rno,price,quantity;
+			Names[*NumOfFood] = malloc(strlen(getname) + 1);
+	   		mfg[*NumOfFood] = malloc(strlen(getmfg) + 1);
+	  		exp[*NumOfFood] = malloc(strlen(getexp) + 1);
+		int i = 0;
+		FILE* fp;
+		fp = fopen("MyFood1.txt", "r");
+		if(fp) {
+			while(fscanf(fp, "%10d %20[^\n] %20d %20d %20[^\n] %10[^\n]\n",&rno,getname,&price,&quantity,getmfg,getexp)==6) {
+				
+				Names[*NumOfFood] = malloc(strlen(getname) + 1);
+	   			mfg[*NumOfFood] = malloc(strlen(getmfg) + 1);
+	  			exp[*NumOfFood] = malloc(strlen(getexp) + 1);
+				Rno[*NumOfFood] = rno;
+				Price[*NumOfFood] = price;
+				Quantity[*NumOfFood] = quantity;
+				strcpy(Names[*NumOfFood],getname);
+				strcpy(mfg[*NumOfFood],getmfg);
+				strcpy(exp[*NumOfFood],getexp);
+
+				(*NumOfFood)++;
+				/* Read until end of file */
+				if(feof(fp)) {
+					break;
+				}	
+			}
+		}
+		fclose(fp);
+	}
+
+
+void WriteFile (int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
+	getchar();
+	char fName[26];
+	printf("Enter FileName: ");
+	gets(fName);
+	FILE* fp = fopen(fName, "a");
+	int i;
+	for(i = 0; i < *NumOfFood; i++) {
+		fprintf(fp, "%-10d %-20s %-10d %-10d %-20s %-20s \n",Rno[i], Names[i], Price[i], Quantity[i], mfg[i], exp[i]);
+	}
+	fclose(fp);
+}
+
+
+/* Function 4: Looking Food */
+
+	void MenuFind() {
+	
+		tab;printf(" ===============================================");
+		tab;printf(" |                  FIND-FOOD                  |");
+		tab;printf(" ===============================================\n");
+		tab;printf("   1. Find food depend on Name                 \n");
+		tab;printf("   2. Find food depend on Price \n"); 
+		tab;printf("   3. Back to Shop Owner Menu     \n");
+		tab;printf(" ===============================================\n\n");
+		tab;printf("Enter your choice: ");
+
+	}
+	
+	void FindByName(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[]) {
+		int a;
+		int i,check=0;
+		
+		for(i=0;i<*NumOfFood;i++) {
+			a = strcmp(strlwr(Names[i]),strlwr(getname));
+			if (a==0) {
+				check=1;
+				printf("\n===================================================================================="
+				"====================================\n");
+				printf("NO\t    NAME\t\tPRICE\t\t  QUANTITY\t     Manufacturing_Date    Expiry_Date\n\n");
+					
+					printf("%-10d  ",Rno[i]);
+					printf("%-20s",Names[i]);
+					printf("%-20d",Price[i]);
+					printf("%-20d",Quantity[i]);
+					printf("%-20s",mfg[i]);
+					printf("%-10s\n",exp[i]);
+					
+				
+				printf("\n===================================================================================="
+				"====================================\n");
+			}
+		} 
+		if(check==0) {
+			printf("\nNOT FOUND!\n");
+		} 
+	}
+
+
+	void FindByPrice(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],int price) {
+		int i,check=0;
+		
+		for(i=0;i<*NumOfFood;i++) {
+			if (Price[i]==price) {
+				check=1;
+				printf("\n===================================================================================="
+				"====================================\n");
+				printf("NO\t    NAME\t\tPRICE\t\t  QUANTITY\t     Manufacturing_Date    Expiry_Date\n\n");
+			
+					printf("%-10d  ",Rno[i]);
+					printf("%-20s",Names[i]);
+					printf("%-20d",Price[i]);
+					printf("%-20d",Quantity[i]);
+					printf("%-20s",mfg[i]);
+					printf("%-10s\n",exp[i]);
+				
+				printf("\n===================================================================================="
+				"====================================\n");
+	
+			}
+		}
+		if(check==0) {
+			printf("\nNOT FOUND!\n");
+		}
+	}
+	
+	
+/* Function 5,6: Delete */
+
+void DeleteFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[]) {
+	int i,check=0,j,a;
+	for(i=0;i<*NumOfFood;i++) {
+		a = strcmp(strlwr(Names[i]),strlwr(getname));
+		if (a==0) { check=1;
+			for(j=i+1;j<*NumOfFood;j++) {
+				Rno[j-1] = Rno[j];
+				Price[j-1] = Price[j];
+				Quantity[j-1] = Quantity[j];
+				strcpy(Names[j-1],Names[j]);
+				strcpy(mfg[j-1],mfg[j]);
+				strcpy(exp[j-1],exp[j]);
+			}
+			(*NumOfFood)--;
+		}
+	} 
+	if(check==0) {
+			printf("\nNOT FOUND!\n");
+		} else {
+			printf("\nDELETED SUCCESSFULLY!!!\n");
+		}
+		
+}
+
+void DeleteAllFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
+	(*NumOfFood)=0;
+	int*Rno_=realloc(Rno,0*sizeof(int));
+	int*Price_=realloc(Price,0*sizeof(int));
+	int*Quantity_=realloc(Quantity,0*sizeof(int));
+	char**Names_=realloc(Names,0*sizeof(char*));
+	char**mfg_=realloc(mfg,0*sizeof(char*));
+	char**exp_=realloc(exp,0*sizeof(char*));
+	free(Rno_);
+	free(Price_);
+	free(Quantity_);
+	free(Names_);
+	free(mfg_);
+	free(exp_);
+	
+}
 
 
 /*   Main Function  */
 
 int main() {
+	
 /* Declare for count element, dynamic allocate */
 	int NumberOfFood=0,i;
 
 /* Declare dynamic array */
-	int*Rno = (int*)calloc(NumberOfFood,sizeof(int));
-	int*Price = (int*)calloc(NumberOfFood,sizeof(int));
-	int*Quantity = (int*)calloc(NumberOfFood,sizeof(int));
+	int*Rno = (int*)calloc(10,sizeof(int));
+	int*Price = (int*)calloc(10,sizeof(int));
+	int*Quantity = (int*)calloc(10,sizeof(int));
 	
 /* Declare array of char pointer */
-	char **Names = (char**)calloc(NumberOfFood,sizeof(char*));
-	char **MFG = (char**)calloc(NumberOfFood,sizeof(char*));
-	char **EXP = (char**)calloc(NumberOfFood,sizeof(char*));
-
+	char **Names = (char**)calloc(10,sizeof(char*));
+	char **MFG = (char**)calloc(10,sizeof(char*));
+	char **EXP = (char**)calloc(10,sizeof(char*));
 	
-/*=====================================================*/
 
+/* Get value from file and store into each array */
+	ReadFile(&NumberOfFood,Rno,Names,Price,Quantity,MFG,EXP);
+		
+/*=====================================================*/
 	ChooseRole();
 	GetChoiceOfOwner(&NumberOfFood,Rno,Names,Price,Quantity,MFG,EXP);
-	
+	GetChoiceOfCustomer(&NumberOfFood,Rno,Names,Price,Quantity,MFG,EXP);
 	free(Rno);
 	free(Price);
 	free(Quantity);
