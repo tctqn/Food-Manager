@@ -26,6 +26,7 @@ void FindByName(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*m
 void FindByPrice(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],int price);
 void DeleteFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[]);
 void DeleteAllFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
+void ChangePrice(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[],int NPrice);
 void BuyFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[],int BQuantity,float *Money,int * NumInCart);
 /* Declare File Function */
 void ReadFile(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]);
@@ -45,6 +46,10 @@ void ChooseRole(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*m
 	tab;printf(" ===============================================\n\n");
 	tab;printf("Enter your role: ");
 	scanf("%d",&userChoice);
+	while (userChoice>3 || userChoice <0) {
+		tab;printf("Enter again (1 - 3): ");
+		scanf("%d",&userChoice);
+	}
 	switch(userChoice) {
 		case 1:
 			system("cls");
@@ -54,7 +59,7 @@ void ChooseRole(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*m
 			system("cls");
 			MenuCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			break;
-		default:
+		case 3:
 			tab;printf("The Program Will Exit !!!");
 			exit(1);
 			break;
@@ -72,9 +77,10 @@ void MenuOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mf
 	tab;printf("   4. Looking for Food         \n");
 	tab;printf("   5. Delete Food       \n");
 	tab;printf("   6. Delete All Food       \n");
-	tab;printf("   7. Write to text file      \n");
-	tab;printf("   8. Back to Role Menu      \n");
-	tab;printf("   9. EXIT      \n");
+	tab;printf("   7. Edit Price Of Food       \n");
+	tab;printf("   8. Write to text file      \n");
+	tab;printf("   9. Back to Role Menu      \n");
+	tab;printf("   10. EXIT      \n");
 	tab;printf(" ===============================================\n\n");
 	tab;printf("Enter your choice: ");
 	GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
@@ -83,7 +89,7 @@ void MenuOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mf
 
 
 void GetChoiceOfOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[]) {
-	int userChoice;
+	int userChoice,NPrice;
 	/* Declare for Check Day */
 	int daymfg,dayexp,monthmfg,monthexp,yearmfg,yearexp;  
 	
@@ -264,7 +270,6 @@ void GetChoiceOfOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,
 						for(i=0;i<strlen(getname);i++) {
 							getname[i] = getname[i+1];
 						}
-				
 				}
 			while(strlen(getname)<20) {
 				strncat(getname, " ",20-strlen(getname));
@@ -281,9 +286,25 @@ void GetChoiceOfOwner(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,
 			GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			break;
 		case 7:
-			WriteFile(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			system("cls");
+			DisplayFood(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			printf("\nEnter name of food you wanna looking for: ");
+				fflush(stdin);
+				scanf("%20[^\n]s",getname);
+			printf("\nEnter new price: ");
+			scanf("%d", &NPrice);
+				while(strlen(getname)<20) {
+					strncat(getname, " ",20-strlen(getname));
+				}
+			ChangePrice(NumOfFood,Rno,Names,Price,Quantity,mfg,exp,getname,NPrice);
+			DisplayFood(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			MenuOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			break;
 		case 8:
+			WriteFile(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			break;
+		case 9:
 			system("cls");
 			ChooseRole(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
@@ -301,7 +322,8 @@ void MenuCustomer(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char
 	tab;printf(" ===============================================\n");
 	tab;printf("   1. Display all Food                 \n");
 	tab;printf("   2. Buy Food \n");
-	tab;printf("   3. EXIT      \n");
+	tab;printf("   3. Back To Role Menu  \n");
+	tab;printf("   4. EXIT      \n");
 	tab;printf(" ===============================================\n\n");
 	tab;printf("Enter your choice: ");
 	GetChoiceOfCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
@@ -337,7 +359,7 @@ void GetChoiceOfCustomer(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quanti
 				} while(userChoice==121);
 
 			break;
-			
+	
 		case 2:
 			
 			do {
@@ -356,27 +378,33 @@ void GetChoiceOfCustomer(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quanti
 					printf("\nPress 1 to Buy Continue or Press any button to get bill\n");
 					userChoice = getch();
 			} while(userChoice==49);
-			if (Money==0) {
-				MenuCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
-				GetChoiceOfCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+			if (NumInCart==0) {
+					MenuCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+					GetChoiceOfCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
 			}
-			else {
-				printf("\nEnter your cash: ");
-				scanf("%f", &userMoney);
-				while(userMoney<Money) {
-				printf("\nYou don't have enough cash to pay!\n\nYou must cash from your banking\n");
-				printf("\nEnter your cash: ");
-				scanf("%f", &userBanking);
-				userMoney+=userBanking;
-				
-			}
-			printf("\nPay Successfully! \n");
-			printf("\nYour money remaining: %f", userMoney - Money);
-			MenuCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
-			GetChoiceOfCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
-			}
-			
+			else{ 
+					printf("\nEnter your cash: ");
+					scanf("%f", &userMoney);
+					while(userMoney<Money) {
+					printf("\nYou don't have enough cash to pay!\n\nYou must cash from your banking\n");
+					printf("\nEnter your cash: ");
+					scanf("%f", &userBanking);
+					userMoney+=userBanking;
+					
+					}
+					printf("\nPay Successfully! \n");
+					printf("\nYour money remaining: %f VND", userMoney - Money);
+					MenuCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+					GetChoiceOfCustomer(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+				}
 			break;
+			
+		case 3: 
+		system("cls");
+		ChooseRole(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+		GetChoiceOfOwner(NumOfFood,Rno,Names,Price,Quantity,mfg,exp);
+		break;	
+	
 		default:
 			tab;printf("Thank you for choosing our mini market!!!");
 			exit(1);
@@ -1046,6 +1074,28 @@ void DeleteAllFood(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,cha
 	free(mfg_);
 	free(exp_);
 	
+}
+
+
+
+/* Function 7: Change Price  */
+
+void ChangePrice(int*NumOfFood,int*Rno,char*Names[],int*Price,int*Quantity,char*mfg[],char*exp[],char getname[],int NPrice) {
+	int a;
+		int i,check=0;
+		
+		for(i=0;i<*NumOfFood;i++) {
+			a = strcmp(strlwr(Names[i]),strlwr(getname));
+			if (a==0) {
+				check=1;
+				Price[i] = NPrice;
+			}
+		} 
+		if(check==0) {
+			printf("\nNOT FOUND!\n\n");
+		} else {
+			printf("\nChange Price Successfully!\n\n");
+		}
 }
 
 
